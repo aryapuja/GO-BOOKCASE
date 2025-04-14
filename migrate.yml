@@ -1,5 +1,4 @@
 development:
   driver: postgres
-  open: "postgres://root:password@localhost:5433/go_bookcase?sslmode=disable"
-  migrations_table: migrations
+  open: "postgres://postgres:WAFyYPPwIRzTiDIRRgIGNthsUGJoxbyZ@postgres.railway.internal:5432/railway?sslmode=require"
   dir: ./migrations
