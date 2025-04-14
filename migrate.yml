@@ -1,0 +1,5 @@
+development:
+  driver: postgres
+  open: "postgres://root:password@localhost:5433/go_bookcase?sslmode=disable"
+  migrations_table: migrations
+  dir: ./migrations
