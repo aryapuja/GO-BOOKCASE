@@ -12,7 +12,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// AuthenticateUser checks if the provided credentials are correct and returns a JWT token
+// AuthenticateUser checks: returns a JWT token
 func AuthenticateUser(username, password string) (string, error) {
 	db, err := config.SetupDatabase()
 	if err != nil {
@@ -20,7 +20,6 @@ func AuthenticateUser(username, password string) (string, error) {
 	}
 	defer db.Close()
 
-	// Find user by username
 	var user models.User
 	query := `SELECT id, username, password FROM users WHERE username=$1`
 	err = db.QueryRow(query, username).Scan(&user.ID, &user.Username, &user.Password)
@@ -34,10 +33,10 @@ func AuthenticateUser(username, password string) (string, error) {
 	// Compare password
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
-		return "", errors.New("invalid username or password (password hash tidak terbaca)")
+		return "", errors.New("INVALID PASSWORD)")
 	}
 
-	// Generate JWT Token if credentials are valid
+	// Generate JWT Token if credentials valid
 	token, err := generateJWT(user)
 	if err != nil {
 		return "", err
@@ -54,7 +53,7 @@ func generateJWT(user models.User) (string, error) {
 		"exp":      time.Now().Add(time.Hour * 24).Unix(),
 	}
 
-	// Get the secret key from the .env file
+	// Get the secret key from the .env
 	secretKey := os.Getenv("SECRET_KEY")
 	if secretKey == "" {
 		return "", errors.New("SECRET_KEY is not set in the environment variables")

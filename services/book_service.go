@@ -6,7 +6,7 @@ import (
 	"go-bookcase/models"
 )
 
-// GetAllBooks retrieves all books from the database
+// GetAllBooks from the database
 func GetAllBooks() ([]models.Book, error) {
 	db, err := config.SetupDatabase()
 	if err != nil {
@@ -33,7 +33,7 @@ func GetAllBooks() ([]models.Book, error) {
 	return books, nil
 }
 
-// CreateBook creates a new book in the database
+// Creates a new book in the database
 func CreateBook(book models.Book) (models.Book, error) {
 	db, err := config.SetupDatabase()
 	if err != nil {
@@ -53,7 +53,7 @@ func CreateBook(book models.Book) (models.Book, error) {
 	return book, nil
 }
 
-// GetBookInfo retrieves book details by ID
+// Retrieves book details by ID
 func GetBookInfo(id string) (models.Book, error) {
 	db, err := config.SetupDatabase()
 	if err != nil {
@@ -74,7 +74,7 @@ func GetBookInfo(id string) (models.Book, error) {
 	return book, nil
 }
 
-// DeleteBook deletes a book from the database
+// Deletes a book from the database
 func DeleteBook(id string) error {
 	db, err := config.SetupDatabase()
 	if err != nil {

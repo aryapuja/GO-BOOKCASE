@@ -2,11 +2,12 @@ package services
 
 import (
 	"database/sql"
+	"errors"
 	"go-bookcase/config"
 	"go-bookcase/models"
 )
 
-// GetAllCategories retrieves all categories from the database
+// retrieves all categories from the database
 func GetAllCategories() ([]models.Category, error) {
 	db, err := config.SetupDatabase()
 	if err != nil {
@@ -33,26 +34,7 @@ func GetAllCategories() ([]models.Category, error) {
 	return categories, nil
 }
 
-// CreateCategory creates a new category in the database
-func CreateCategory(category models.Category) (models.Category, error) {
-	db, err := config.SetupDatabase()
-	if err != nil {
-		return models.Category{}, err
-	}
-	defer db.Close()
-
-	query := `INSERT INTO categories (name, created_by) VALUES ($1, $2) RETURNING id`
-	var id int
-	err = db.QueryRow(query, category.Name, category.CreatedBy).Scan(&id)
-	if err != nil {
-		return models.Category{}, err
-	}
-
-	category.ID = id
-	return category, nil
-}
-
-// GetCategoryInfo retrieves category details by ID
+// retrieves category details by ID
 func GetCategoryInfo(id string) (models.Category, error) {
 	db, err := config.SetupDatabase()
 	if err != nil {
@@ -73,7 +55,54 @@ func GetCategoryInfo(id string) (models.Category, error) {
 	return category, nil
 }
 
-// DeleteCategory deletes a category from the database
+// creates a new category in the database
+func CreateCategory(category models.Category) (models.Category, error) {
+	db, err := config.SetupDatabase()
+	if err != nil {
+		return models.Category{}, err
+	}
+	defer db.Close()
+
+	query := `INSERT INTO categories (name, created_by) VALUES ($1, $2) RETURNING id`
+	var id int
+	err = db.QueryRow(query, category.Name, category.CreatedBy).Scan(&id)
+	if err != nil {
+		return models.Category{}, err
+	}
+
+	category.ID = id
+	return category, nil
+}
+
+// update category by ID
+func UpdateCategory(id string, category models.Category) (models.Category, error) {
+	db, err := config.SetupDatabase()
+	if err != nil {
+		return models.Category{}, err
+	}
+	defer db.Close()
+
+	// check category
+	var existingCategory models.Category
+	query := `SELECT id, name FROM categories WHERE id = $1`
+	err = db.QueryRow(query, id).Scan(&existingCategory.ID, &existingCategory.Name)
+	if err == sql.ErrNoRows {
+		return models.Category{}, errors.New("UPDATE FAILED: CATEGORY NOT FOUND")
+	} else if err != nil {
+		return models.Category{}, err
+	}
+
+	// update category
+	updateQuery := `UPDATE categories SET name = $1, modified_at = current_timestamp WHERE id = $2 RETURNING id, name`
+	err = db.QueryRow(updateQuery, category.Name, id).Scan(&category.ID, &category.Name)
+	if err != nil {
+		return models.Category{}, err
+	}
+
+	return category, nil
+}
+
+// deletes a category from the database
 func DeleteCategory(id string) error {
 	db, err := config.SetupDatabase()
 	if err != nil {
@@ -81,8 +110,17 @@ func DeleteCategory(id string) error {
 	}
 	defer db.Close()
 
-	query := `DELETE FROM categories WHERE id = $1`
-	_, err = db.Exec(query, id)
+	var existingCategory models.Category
+	query := `SELECT id FROM categories WHERE id = $1`
+	err = db.QueryRow(query, id).Scan(&existingCategory.ID)
+	if err == sql.ErrNoRows {
+		return errors.New("DELETE FAILED: CATEGORY NOT FOUND")
+	} else if err != nil {
+		return err
+	}
+
+	deleteQuery := `DELETE FROM categories WHERE id = $1`
+	_, err = db.Exec(deleteQuery, id)
 	if err != nil {
 		return err
 	}

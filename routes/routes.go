@@ -17,10 +17,11 @@ func SetupRoutes(r *gin.Engine) {
 
 	// CRUD kategori
 	authorized.GET("/api/categories", controllers.GetAllCategories)
-	authorized.POST("/api/categories", controllers.CreateCategory)
 	authorized.GET("/api/categories/:id", controllers.GetCategoryInfo)
-	authorized.DELETE("/api/categories/:id", controllers.DeleteCategory)
 	authorized.GET("/api/categories/:id/books", controllers.GetBooksByCategory)
+	authorized.POST("/api/categories", controllers.CreateCategory)
+	authorized.PUT("/api/categories/:id", controllers.UpdateCategory)
+	authorized.DELETE("/api/categories/:id", controllers.DeleteCategory)
 
 	// CRUD buku
 	authorized.GET("/api/books", controllers.GetAllBooks)
