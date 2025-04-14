@@ -1,4 +1,4 @@
-\c go_bookcase;
+-- \c go_bookcase;
 
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,

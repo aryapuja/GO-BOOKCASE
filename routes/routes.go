@@ -10,7 +10,7 @@ import (
 func SetupRoutes(r *gin.Engine) {
 	// Route login
 	r.POST("/api/users/login", controllers.LoginUser)
-
+	
 	// Routes middleware JWT
 	authorized := r.Group("/")
 	authorized.Use(middleware.JWTMiddleware()) // Apply JWT middleware

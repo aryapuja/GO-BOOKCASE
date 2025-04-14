@@ -1,8 +1,8 @@
 -- Membuat database jika belum ada
-CREATE DATABASE IF NOT EXISTS go_bookcase;
+-- CREATE DATABASE IF NOT EXISTS go_bookcase;
 
 -- Gunakan database go_bookcase
-\c go_bookcase;
+-- \c go_bookcase;
 
 CREATE TABLE IF NOT EXISTS categories (
     id SERIAL PRIMARY KEY,
