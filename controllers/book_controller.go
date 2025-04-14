@@ -8,7 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GetAllBooks - Endpoint untuk menampilkan semua buku
+// @Summary GetAllBooks
+// @Description Endpoint untuk menampilkan semua buku
+// @Success 200 {array} models.Book "List buku"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /api/books [get]
 func GetAllBooks(c *gin.Context) {
 	books, err := services.GetAllBooks()
 	if err != nil {
@@ -18,7 +22,13 @@ func GetAllBooks(c *gin.Context) {
 	c.JSON(http.StatusOK, books)
 }
 
-// GetBookInfo - Endpoint untuk menampilkan detail buku
+// @Summary GetBookInfo
+// @Description Endpoint untuk menampilkan detail buku berdasarkan ID
+// @Param id path int true "ID Buku"
+// @Success 200 {object} models.Book "Detail Buku"
+// @Failure 404 {object} map[string]interface{} "Buku tidak ditemukan"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /api/books/{id} [get]
 func GetBookInfo(c *gin.Context) {
 	bookID := c.Param("id")
 	book, err := services.GetBookInfo(bookID)
@@ -30,7 +40,15 @@ func GetBookInfo(c *gin.Context) {
 	c.JSON(http.StatusOK, book)
 }
 
-// CreateBook - Endpoint untuk menambah buku
+// @Summary CreateBook
+// @Description Endpoint untuk menambah buku baru
+// @Accept  json
+// @Produce  json
+// @Param book body models.Book true "Data Buku"
+// @Success 200 {object} models.Book "Buku berhasil dibuat"
+// @Failure 400 {object} map[string]interface{} "Invalid input"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /api/books [post]
 func CreateBook(c *gin.Context) {
 	var book models.Book
 
@@ -54,7 +72,15 @@ func CreateBook(c *gin.Context) {
 	c.JSON(http.StatusOK, createdBook)
 }
 
-// UpdateBook - Endpoint untuk update buku
+// @Summary UpdateBook
+// @Description Endpoint untuk update buku berdasarkan ID
+// @Param id path int true "ID Buku"
+// @Param book body models.Book true "Update data buku"
+// @Success 200 {object} models.Book "Data buku terupdate"
+// @Failure 400 {object} map[string]interface{} "Invalid input"
+// @Failure 404 {object} map[string]interface{} "Buku tidak ditemukan"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /api/books/{id} [put]
 func UpdateBook(c *gin.Context) {
 	bookID := c.Param("id")
 	var book models.Book
@@ -78,7 +104,13 @@ func UpdateBook(c *gin.Context) {
 	c.JSON(http.StatusOK, updatedBook)
 }
 
-// DeleteBook - Endpoint untuk menghapus buku
+// @Summary DeleteBook
+// @Description Endpoint untuk menghapus buku berdasarkan ID
+// @Param id path int true "ID Buku"
+// @Success 200 {object} map[string]interface{} "Buku berhasil dihapus"
+// @Failure 404 {object} map[string]interface{} "Buku tidak ditemukan"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /api/books/{id} [delete]
 func DeleteBook(c *gin.Context) {
 	bookID := c.Param("id")
 	err := services.DeleteBook(bookID)

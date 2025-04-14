@@ -8,7 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GetAllCategories - Endpoint untuk menampilkan semua kategori
+// @Summary GetAllCategories
+// @Description Endpoint untuk menampilkan semua kategori
+// @Success 200 {array} models.Category "List Kategori"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /api/categories [get]
 func GetAllCategories(c *gin.Context) {
 	categories, err := services.GetAllCategories()
 	if err != nil {
@@ -18,7 +22,13 @@ func GetAllCategories(c *gin.Context) {
 	c.JSON(http.StatusOK, categories)
 }
 
-// GetCategoryInfo - Endpoint untuk menampilkan detail kategori
+// @Summary GetCategoryInfo
+// @Description Endpoint untuk menampilkan detail kategori berdasarkan ID
+// @Param id path int true "ID Kategori"
+// @Success 200 {object} models.Category "Info Kategori"
+// @Failure 404 {object} map[string]interface{} "Kategori tidak ditemukan"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /api/categories/{id} [get]
 func GetCategoryInfo(c *gin.Context) {
 	categoryID := c.Param("id")
 	category, err := services.GetCategoryInfo(categoryID)
@@ -30,7 +40,12 @@ func GetCategoryInfo(c *gin.Context) {
 	c.JSON(http.StatusOK, category)
 }
 
-// GetBooksByCategory - Endpoint untuk menampilkan buku berdasarkan kategori
+// @Summary GetBooksByCategory
+// @Description Endpoint untuk menampilkan buku berdasarkan kategori
+// @Param id path int true "ID Kategori"
+// @Success 200 {array} models.Book "List buku sesuai kategori"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /api/categories/{id}/books [get]
 func GetBooksByCategory(c *gin.Context) {
 	categoryID := c.Param("id")
 	books, err := services.GetBooksByCategory(categoryID)
@@ -42,7 +57,15 @@ func GetBooksByCategory(c *gin.Context) {
 	c.JSON(http.StatusOK, books)
 }
 
-// CreateCategory - Endpoint untuk menambah kategori
+// @Summary CreateCategory
+// @Description Endpoint untuk menambah kategori baru
+// @Accept  json
+// @Produce  json
+// @Param category body models.Category true "Data Kategoti"
+// @Success 200 {object} models.Category "Kategori berhasil dibuat"
+// @Failure 400 {object} map[string]interface{} "Invalid input"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /api/categories [post]
 func CreateCategory(c *gin.Context) {
 	var category models.Category
 	if err := c.ShouldBindJSON(&category); err != nil {
@@ -59,7 +82,14 @@ func CreateCategory(c *gin.Context) {
 	c.JSON(http.StatusOK, createdCategory)
 }
 
-// UpdateCategory - Endpoint untuk update kategori
+// @Summary UpdateCategory
+// @Description Endpoint untuk update kategori berdasarkan ID
+// @Param id path int true "ID Kategori"
+// @Param category body models.Category true "Updated data kategori"
+// @Success 200 {object} models.Category "Kategori terupdate"
+// @Failure 400 {object} map[string]interface{} "Invalid request body"
+// @Failure 404 {object} map[string]interface{} "Category not found"
+// @Router /api/categories/{id} [put]
 func UpdateCategory(c *gin.Context) {
 	categoryID := c.Param("id")
 	var category models.Category
@@ -77,7 +107,13 @@ func UpdateCategory(c *gin.Context) {
 	c.JSON(http.StatusOK, updatedCategory)
 }
 
-// DeleteCategory - Endpoint untuk menghapus kategori
+// @Summary DeleteCategory
+// @Description Endpoint untuk menghapus kategori berdasarkan ID
+// @Param id path int true "ID Kategori"
+// @Success 200 {object} map[string]interface{} "Kategori dihapus"
+// @Failure 404 {object} map[string]interface{} "Kategori tidak ditemukan"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /api/categories/{id} [delete]
 func DeleteCategory(c *gin.Context) {
 	categoryID := c.Param("id")
 	err := services.DeleteCategory(categoryID)

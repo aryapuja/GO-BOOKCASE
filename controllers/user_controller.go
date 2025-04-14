@@ -8,6 +8,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary User login
+// @Description User login untuk mendapatkan token JWT
+// @Accept  json
+// @Produce  json
+// @Param user body models.User true "User Kredensial"
+// @Success 200 {object} map[string]interface{}"Login berhasi;, returns JWT token"
+// @Failure 400 {object} map[string]interface{} "Invalid input"
+// @Failure 401 {object} map[string]interface{} "Unauthorized"
+// @Router /api/users/login [post]
 func LoginUser(c *gin.Context) {
 	var credentials models.User
 	if err := c.ShouldBindJSON(&credentials); err != nil {

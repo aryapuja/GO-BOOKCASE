@@ -8,8 +8,12 @@ import (
 	"go-bookcase/config"
 	"go-bookcase/routes"
 
+	_ "go-bookcase/docs" // Mengimpor package docs untuk Swagger
+
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
 func main() {
@@ -27,12 +31,20 @@ func main() {
 
 	r := gin.Default()
 
+	// Setup Swagger documentation
+	// Menyajikan Swagger UI dengan ginSwagger.Default
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+
+	// Setup routes
 	routes.SetupRoutes(r)
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
+
+	// Jalankan aplikasi
 	err = r.Run(fmt.Sprintf(":%s", port))
 	if err != nil {
 		log.Fatalf("Server failed to start: %v", err)

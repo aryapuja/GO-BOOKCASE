@@ -1,0 +1,374 @@
+definitions:
+  models.Book:
+    properties:
+      category_id:
+        type: integer
+      created_at:
+        type: string
+      created_by:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      modified_at:
+        type: string
+      modified_by:
+        type: string
+      price:
+        type: integer
+      release_year:
+        type: integer
+      thickness:
+        type: string
+      title:
+        type: string
+      total_page:
+        type: integer
+    type: object
+  models.Category:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      id:
+        type: integer
+      modified_at:
+        type: string
+      modified_by:
+        type: string
+      name:
+        type: string
+    type: object
+  models.User:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      id:
+        type: integer
+      modified_at:
+        type: string
+      modified_by:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /api/books:
+    get:
+      description: Endpoint untuk menampilkan semua buku
+      responses:
+        "200":
+          description: List buku
+          schema:
+            items:
+              $ref: '#/definitions/models.Book'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: GetAllBooks
+    post:
+      consumes:
+      - application/json
+      description: Endpoint untuk menambah buku baru
+      parameters:
+      - description: Data Buku
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/models.Book'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Buku berhasil dibuat
+          schema:
+            $ref: '#/definitions/models.Book'
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: CreateBook
+  /api/books/{id}:
+    delete:
+      description: Endpoint untuk menghapus buku berdasarkan ID
+      parameters:
+      - description: ID Buku
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Buku berhasil dihapus
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Buku tidak ditemukan
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: DeleteBook
+    get:
+      description: Endpoint untuk menampilkan detail buku berdasarkan ID
+      parameters:
+      - description: ID Buku
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Detail Buku
+          schema:
+            $ref: '#/definitions/models.Book'
+        "404":
+          description: Buku tidak ditemukan
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: GetBookInfo
+    put:
+      description: Endpoint untuk update buku berdasarkan ID
+      parameters:
+      - description: ID Buku
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update data buku
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/models.Book'
+      responses:
+        "200":
+          description: Data buku terupdate
+          schema:
+            $ref: '#/definitions/models.Book'
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Buku tidak ditemukan
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: UpdateBook
+  /api/categories:
+    get:
+      description: Endpoint untuk menampilkan semua kategori
+      responses:
+        "200":
+          description: List Kategori
+          schema:
+            items:
+              $ref: '#/definitions/models.Category'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: GetAllCategories
+    post:
+      consumes:
+      - application/json
+      description: Endpoint untuk menambah kategori baru
+      parameters:
+      - description: Data Kategoti
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/models.Category'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Kategori berhasil dibuat
+          schema:
+            $ref: '#/definitions/models.Category'
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: CreateCategory
+  /api/categories/{id}:
+    delete:
+      description: Endpoint untuk menghapus kategori berdasarkan ID
+      parameters:
+      - description: ID Kategori
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Kategori dihapus
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Kategori tidak ditemukan
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: DeleteCategory
+    get:
+      description: Endpoint untuk menampilkan detail kategori berdasarkan ID
+      parameters:
+      - description: ID Kategori
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Info Kategori
+          schema:
+            $ref: '#/definitions/models.Category'
+        "404":
+          description: Kategori tidak ditemukan
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: GetCategoryInfo
+    put:
+      description: Endpoint untuk update kategori berdasarkan ID
+      parameters:
+      - description: ID Kategori
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated data kategori
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/models.Category'
+      responses:
+        "200":
+          description: Kategori terupdate
+          schema:
+            $ref: '#/definitions/models.Category'
+        "400":
+          description: Invalid request body
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Category not found
+          schema:
+            additionalProperties: true
+            type: object
+      summary: UpdateCategory
+  /api/categories/{id}/books:
+    get:
+      description: Endpoint untuk menampilkan buku berdasarkan kategori
+      parameters:
+      - description: ID Kategori
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: List buku sesuai kategori
+          schema:
+            items:
+              $ref: '#/definitions/models.Book'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: GetBooksByCategory
+  /api/users/login:
+    post:
+      consumes:
+      - application/json
+      description: User login untuk mendapatkan token JWT
+      parameters:
+      - description: User Kredensial
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login berhasi;, returns JWT token
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      summary: User login
+swagger: "2.0"
