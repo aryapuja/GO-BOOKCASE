@@ -6,10 +6,9 @@ import (
 	"log"
 	"os"
 
-	_ "github.com/lib/pq" // PostgreSQL driver
+	_ "github.com/lib/pq"
 )
 
-// SetupDatabase initializes the database connection
 func SetupDatabase() (*sql.DB, error) {
 	// Ambil variabel lingkungan dari file .env
 	dbHost := os.Getenv("DB_HOST")
@@ -26,13 +25,11 @@ func SetupDatabase() (*sql.DB, error) {
 	// Format URL koneksi PostgreSQL
 	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", dbUser, dbPassword, dbHost, dbPort, dbName)
 
-	// Buka koneksi ke database
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		return nil, err
 	}
 
-	// Tes koneksi ke database
 	err = db.Ping()
 	if err != nil {
 		return nil, err

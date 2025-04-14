@@ -9,7 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// JWTMiddleware to check for valid JWT token in the Authorization header
 func JWTMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Get the token from the "Authorization" header

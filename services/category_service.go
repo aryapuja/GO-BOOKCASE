@@ -7,7 +7,7 @@ import (
 	"go-bookcase/models"
 )
 
-// retrieves all categories from the database
+// retrieves all categories
 func GetAllCategories() ([]models.Category, error) {
 	db, err := config.SetupDatabase()
 	if err != nil {
@@ -55,7 +55,35 @@ func GetCategoryInfo(id string) (models.Category, error) {
 	return category, nil
 }
 
-// creates a new category in the database
+// retrieves all books for a specific category
+func GetBooksByCategory(categoryID string) ([]models.Book, error) {
+	db, err := config.SetupDatabase()
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	query := `SELECT id, title, description, image_url, release_year, price, total_page, thickness, category_id, created_at, created_by 
+			  FROM books WHERE category_id = $1`
+	rows, err := db.Query(query, categoryID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var books []models.Book
+	for rows.Next() {
+		var book models.Book
+		if err := rows.Scan(&book.ID, &book.Title, &book.Description, &book.ImageUrl, &book.ReleaseYear, &book.Price, &book.TotalPage, &book.Thickness, &book.CategoryID, &book.CreatedAt, &book.CreatedBy); err != nil {
+			return nil, err
+		}
+		books = append(books, book)
+	}
+
+	return books, nil
+}
+
+// creates a new category
 func CreateCategory(category models.Category) (models.Category, error) {
 	db, err := config.SetupDatabase()
 	if err != nil {
@@ -102,7 +130,7 @@ func UpdateCategory(id string, category models.Category) (models.Category, error
 	return category, nil
 }
 
-// deletes a category from the database
+// deletes a category
 func DeleteCategory(id string) error {
 	db, err := config.SetupDatabase()
 	if err != nil {
@@ -126,32 +154,4 @@ func DeleteCategory(id string) error {
 	}
 
 	return nil
-}
-
-// GetBooksByCategory retrieves all books for a specific category
-func GetBooksByCategory(categoryID string) ([]models.Book, error) {
-	db, err := config.SetupDatabase()
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
-	query := `SELECT id, title, description, image_url, release_year, price, total_page, thickness, category_id, created_at, created_by 
-			  FROM books WHERE category_id = $1`
-	rows, err := db.Query(query, categoryID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var books []models.Book
-	for rows.Next() {
-		var book models.Book
-		if err := rows.Scan(&book.ID, &book.Title, &book.Description, &book.ImageURL, &book.ReleaseYear, &book.Price, &book.TotalPage, &book.Thickness, &book.CategoryID, &book.CreatedAt, &book.CreatedBy); err != nil {
-			return nil, err
-		}
-		books = append(books, book)
-	}
-
-	return books, nil
 }

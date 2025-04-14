@@ -18,12 +18,31 @@ func GetAllBooks(c *gin.Context) {
 	c.JSON(http.StatusOK, books)
 }
 
+// GetBookInfo - Endpoint untuk menampilkan detail buku
+func GetBookInfo(c *gin.Context) {
+	bookID := c.Param("id")
+	book, err := services.GetBookInfo(bookID)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Book not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, book)
+}
+
 // CreateBook - Endpoint untuk menambah buku
 func CreateBook(c *gin.Context) {
 	var book models.Book
+
 	if err := c.ShouldBindJSON(&book); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
 		return
+	}
+
+	if book.TotalPage > 100 {
+		book.Thickness = "tebal"
+	} else {
+		book.Thickness = "tipis"
 	}
 
 	createdBook, err := services.CreateBook(book)
@@ -35,16 +54,28 @@ func CreateBook(c *gin.Context) {
 	c.JSON(http.StatusOK, createdBook)
 }
 
-// GetBookInfo - Endpoint untuk menampilkan detail buku
-func GetBookInfo(c *gin.Context) {
+// UpdateBook - Endpoint untuk update buku
+func UpdateBook(c *gin.Context) {
 	bookID := c.Param("id")
-	book, err := services.GetBookInfo(bookID)
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Book not found"})
+	var book models.Book
+	if err := c.ShouldBindJSON(&book); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
 		return
 	}
 
-	c.JSON(http.StatusOK, book)
+	if book.TotalPage > 100 {
+		book.Thickness = "tebal"
+	} else {
+		book.Thickness = "tipis"
+	}
+
+	updatedBook, err := services.UpdateBook(bookID, book)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Invalid data / Book Not Found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, updatedBook)
 }
 
 // DeleteBook - Endpoint untuk menghapus buku

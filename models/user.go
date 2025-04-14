@@ -2,7 +2,6 @@ package models
 
 import "time"
 
-// Category represents a category entity
 type User struct {
 	ID         int       `json:"id"`
 	Username   string    `json:"username"`

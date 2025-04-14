@@ -8,12 +8,12 @@ import (
 )
 
 func SetupRoutes(r *gin.Engine) {
-	// Route untuk login
+	// Route login
 	r.POST("/api/users/login", controllers.LoginUser)
 
-	// Routes dengan middleware JWT
+	// Routes middleware JWT
 	authorized := r.Group("/")
-	authorized.Use(middleware.JWTMiddleware()) // Apply JWT middleware for these routes
+	authorized.Use(middleware.JWTMiddleware()) // Apply JWT middleware
 
 	// CRUD kategori
 	authorized.GET("/api/categories", controllers.GetAllCategories)
@@ -25,7 +25,8 @@ func SetupRoutes(r *gin.Engine) {
 
 	// CRUD buku
 	authorized.GET("/api/books", controllers.GetAllBooks)
-	authorized.POST("/api/books", controllers.CreateBook)
 	authorized.GET("/api/books/:id", controllers.GetBookInfo)
+	authorized.POST("/api/books", controllers.CreateBook)
+	authorized.PUT("/api/books/:id", controllers.UpdateBook)
 	authorized.DELETE("/api/books/:id", controllers.DeleteBook)
 }

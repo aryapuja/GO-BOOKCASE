@@ -18,6 +18,18 @@ func GetAllCategories(c *gin.Context) {
 	c.JSON(http.StatusOK, categories)
 }
 
+// GetCategoryInfo - Endpoint untuk menampilkan detail kategori
+func GetCategoryInfo(c *gin.Context) {
+	categoryID := c.Param("id")
+	category, err := services.GetCategoryInfo(categoryID)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Category not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, category)
+}
+
 // GetBooksByCategory - Endpoint untuk menampilkan buku berdasarkan kategori
 func GetBooksByCategory(c *gin.Context) {
 	categoryID := c.Param("id")
@@ -47,18 +59,6 @@ func CreateCategory(c *gin.Context) {
 	c.JSON(http.StatusOK, createdCategory)
 }
 
-// GetCategoryInfo - Endpoint untuk menampilkan detail kategori
-func GetCategoryInfo(c *gin.Context) {
-	categoryID := c.Param("id")
-	category, err := services.GetCategoryInfo(categoryID)
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Category not found"})
-		return
-	}
-
-	c.JSON(http.StatusOK, category)
-}
-
 // UpdateCategory - Endpoint untuk update kategori
 func UpdateCategory(c *gin.Context) {
 	categoryID := c.Param("id")
@@ -70,7 +70,6 @@ func UpdateCategory(c *gin.Context) {
 
 	updatedCategory, err := services.UpdateCategory(categoryID, category)
 	if err != nil {
-		// Mengubah pesan error menjadi lebih jelas
 		c.JSON(http.StatusNotFound, gin.H{"error": "Update Failed: ID Not Found"})
 		return
 	}
