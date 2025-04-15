@@ -33,7 +33,7 @@ func AuthenticateUser(username, password string) (string, error) {
 	// Compare password
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
-		return "", errors.New("INVALID PASSWORD)")
+		return "", errors.New("INVALID PASSWORD")
 	}
 
 	// Generate JWT Token if credentials valid

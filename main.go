@@ -12,8 +12,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	// "github.com/joho/godotenv"
-	// ginSwagger "github.com/swaggo/gin-swagger"
-	// "github.com/swaggo/gin-swagger/swaggerFiles"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
 func main() {
@@ -32,7 +32,7 @@ func main() {
 	r := gin.Default()
 
 	// Setup Swagger documentation
-	// r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Setup routes
 	routes.SetupRoutes(r)

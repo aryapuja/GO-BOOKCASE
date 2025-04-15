@@ -2,8 +2,7 @@
 
 Go Bookcase adalah aplikasi API untuk mengelola informasi buku, kategori, dan pengguna dengan autentikasi menggunakan **JWT**
 
-Deploy: http://go-bookcase-production.up.railway.app (Bug route login + swagger tidak terbaca, tapi route dengan validasi JWT sudah aktif)
-
+Deploy: https://go-bookcase-production.up.railway.app
 ## Kegunaan
 
 - **Manajemen Buku**: Menambahkan, mengupdate, menghapus, dan menampilkan buku-buku yang ada.
